@@ -1,5 +1,8 @@
 package com.cncrit.qiaoqiao.vsp;
 
+import com.cncrit.qiaoqiao.VspOperation;
+import com.miot.android.Service;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,19 +12,13 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
 
-import com.cncrit.qiaoqiao.Tools;
-import com.cncrit.qiaoqiao.VspOperation;
-import com.miot.android.Service;
 
-import android.util.Log;
 
 public class TcpSocket<IReceiver> implements Runnable{
 	public static String tag = TcpSocket.class.getName();
     public static String DefaultCharSetName = "ISO-8859-1"; // "UTF-8"; // "ISO-8859-1";
 
-	interface IReceiver {
-		public void onReceive(byte[] recvData, int recvLen);
-	}
+
 
 	TcpSocket(IReceiver tsr){
 		this.tsr = tsr;
@@ -49,7 +46,6 @@ public class TcpSocket<IReceiver> implements Runnable{
 		try {			
 			return send(sendString.getBytes(DefaultCharSetName),sendString.length());
 		} catch (UnsupportedEncodingException e) {
-			Log.e(tag, "send: UnsupportedEncodingException raised!");
 			e.printStackTrace();
 			return false;
 		}
@@ -61,7 +57,6 @@ public class TcpSocket<IReceiver> implements Runnable{
 
 	public boolean send(byte[] sendBuff,int length) {
 		try {
-			Log.e(tag, "send: "+Tools.Bin2HexString(sendBuff,0,length)+"length"+length);
 			synchronized (this)
 			{ 
 				if( sc != null && os != null ){
@@ -70,7 +65,6 @@ public class TcpSocket<IReceiver> implements Runnable{
 				}
 			}
 		} catch (Exception e) {
-			Log.e(tag, "send: Exception raised!");
 			e.printStackTrace();
 			return false;
 		}
@@ -109,19 +103,16 @@ public class TcpSocket<IReceiver> implements Runnable{
 			isConnect=false;
 			VspOperation.loginFailCode=-1;
 			VspOperation.loginFailErrorMess="连接服务器失败,检查网络";
-			Log.e(tag, "connect:["+strServerIP+":"+nPort+"] UnknownHostException " + e.getMessage());
 			return false;
 		} catch (IOException e) {
 			isConnect=false;
 			VspOperation.loginFailErrorMess="连接服务器失败,检查网络";
-			Log.e(tag, "connect:["+strServerIP+":"+nPort+"] IOException " + e.getMessage());
 			VspOperation.loginFailCode=-1;
 			return false;
 		} catch (Exception e) {
 			isConnect=false;
 			VspOperation.loginFailErrorMess="连接服务器失败,检查网络";
 			VspOperation.loginFailCode=-1;
-			Log.e(tag, "connect:["+strServerIP+":"+nPort+"] Exception " + e.getMessage());
 			return false;
 		}
 		return true;
@@ -148,7 +139,6 @@ public class TcpSocket<IReceiver> implements Runnable{
 				os = null;
 			}
 		} catch (IOException e) {
-			Log.e(tag,"disconnect: Exception " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -164,7 +154,7 @@ public class TcpSocket<IReceiver> implements Runnable{
 					Thread.sleep(2);
 				} else {
 					if(tsr != null){
-						((IReceiver) tsr).onReceive(recvBuff, recvLen);
+						((com.cncrit.qiaoqiao.vsp.IReceiver) tsr).onReceive(recvBuff, recvLen);
 					}
 				}
 //				System.gc();
@@ -172,7 +162,6 @@ public class TcpSocket<IReceiver> implements Runnable{
 				
 			} catch (Exception e) {
 				e.printStackTrace();
-				Log.e(tag, "Receive Error: " + e.toString());
 				break;
 			}
 			
@@ -181,8 +170,6 @@ public class TcpSocket<IReceiver> implements Runnable{
 			Service.sendBroadcast("com.miot.android.MIOT_PLATFORM_RECONNECTED", new String []{"1",""});
 			isConnect=false;
 		 }
-		Log.e(tag, "Socket Client Exit");
-	
-		
+
 	}
 }

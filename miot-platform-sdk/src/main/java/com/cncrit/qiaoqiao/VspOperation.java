@@ -1,9 +1,6 @@
 package com.cncrit.qiaoqiao;
 
-import java.io.File;
-
 import android.content.Context;
-import android.util.Log;
 
 import com.cncrit.qiaoqiao.vsp.VspCodec;
 import com.cncrit.qiaoqiao.vsp.VspDefine;
@@ -11,6 +8,8 @@ import com.cncrit.qiaoqiao.vsp.VspMessage;
 import com.cncrit.qiaoqiao.vsp.VspProperty;
 import com.miot.android.Service;
 import com.miot.android.content.NoFormatConsts;
+
+import java.io.File;
 
 public class VspOperation {
 	public static String tag = VspOperation.class.getName();
@@ -37,7 +36,7 @@ public class VspOperation {
 	public static boolean HasLogin(Context c) {
 		boolean bLogin = (cuId != 0);
 		if (c != null && !bLogin) {
-			Log.i(tag, "HasLogin: not login!");
+		
 			Tools.AlertError("请先登录系统！", c);
 		}
 		return bLogin;
@@ -49,13 +48,12 @@ public class VspOperation {
 	}
 
 	protected static boolean HasGotCmsAddress() {
-		System.out.println("CURS，cmsIp=" + cmsIp+",cmsVc="+cmsVc);
+
 		return cmsVc!=null && cmsVc.hasConnect();
 	}
 
 	public static void Reset() {
-		Log.d(tag, "Reset: enter! cuId=" + cuId + ",selectedPuId="
-				+ selectedPuId);
+	
 		cuId = 0;
 		sessionId = VspDefine.NONE_SES_ID;
 		appCuId = 0;
@@ -100,11 +98,7 @@ public class VspOperation {
 				Thread.sleep(HEARTBEAT_INTEVAL);
 				if (HasLogin() && cmsVc != null) {
 					if ((++idleCount) > IDLE_TIMEOUT_COUNT) {
-						Log.e(tag,
-								"doHeartbeat: logout for idle_timeout! [IDLE_TIMEOUT_INTERVAL = "
-										+ (IDLE_TIMEOUT_COUNT
-												* HEARTBEAT_INTEVAL / 1000)
-										+ " seconds]");
+						
 						if (isLogout) {
 							Service.sendBroadcast("com.miot.android.MIOT_PLATFORM_RECONNECTED", new String []{"1",""});
 						}
@@ -116,19 +110,18 @@ public class VspOperation {
 					VspMessage vm = new VspMessage(VspDefine.codeHeartBeat,
 							sessionId);
 					VspProperty vp = vm.addProperty(VspDefine.propHeartBeat);
-					System.out.println("serial=" + serial);
+
 					vp.setIntValue(VspDefine.HeartBeat_serial_idx, serial++);
 					vp.setIntValue(VspDefine.HeartBeat_actionTime_idx,
 							Tools.GetTickTime());
 					cmsVc.send(vm);
 					
-					Log.w(tag, "doHeartbeat: once![cuId=" + cuId
-							+ "][idleCount=" + idleCount + "]");										
+							
 				} else {
 					
 				}
 			} catch (Exception e) {
-				Log.e(tag, "doHeartbeat: execption raise! " + e.getMessage());
+				
 			}
 
 		}
@@ -144,14 +137,13 @@ public class VspOperation {
 			if (!dir.exists())
 				dir.mkdirs();
 			for (String row : advList.split(VspDefine.LIST_DATA_ROW_SEPARATOR)) {
-				Log.d(tag, "doGetAdvFiles: one row: " + row);
+			
 				if (row.equals(""))
 					break;
 				String[] columns = row
 						.split(VspDefine.LIST_DATA_COLUMN_SEPARATOR);
 				if (columns.length < 4) {
-					Log.e(tag, "doGetAdvFiles: should has 4 columns["
-							+ columns.length + "] at least!");
+				
 					continue;
 				}
 				int vaType = Integer.parseInt(columns[0]);
@@ -161,18 +153,17 @@ public class VspOperation {
 				String fileName = vaPath.substring(vaPath.lastIndexOf("/") + 1);
 				boolean bRet = Tools.GetFileByHttp(vaPath, advDir, fileName,
 						false);
-				Log.i(tag, "doGetAdvFiles: now get '" + vaPath + "' to '"
-						+ advDir + "', result is " + bRet);
+			
 				if (bRet);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			Log.e(tag, "doGetAdvFiles: execption raise! " + e.getMessage());
+		
 		}
 	}
 
 	public static boolean StartHeartbeat() {
-		Log.d(tag, "StartHeartbeat: enter! heartbeatThread=" + heartbeatThread);
+	
 		if (heartbeatThread == null) {
 			heartbeatThread = new Thread(new Runnable() {
 				@Override
@@ -203,8 +194,7 @@ public class VspOperation {
 			case VspDefine.codeGetPuList:
 				break;
 			default:
-				Log.w(tag, "showCommonResInfo: unsettled reqCode["
-						+ vspCommonResReqcode + "]");
+			
 			}
 		}
 	}
@@ -216,9 +206,7 @@ public class VspOperation {
 		int vspCommonResResult = vp.getIntValue(VspDefine.CommonRes_result_idx);
 		String vspCommonResReason = vp
 				.getVariableValue(VspDefine.CommonRes_reason_idx);
-		Log.d(tag, "procCommonRes: enter! [reqCode=" + vspCommonResReqcode
-				+ "][result=" + vspCommonResResult + "][" + vspCommonResReason
-				+ "]");
+
 		
 		if(vspCommonResReqcode==VspDefine.codeLogin){
 			VspOperation.loginFailCode=2001;
@@ -243,10 +231,9 @@ public class VspOperation {
 		
 		VspCodec vc = new VspCodec();
 		updateLoginActTitle(cmsIp);
-		System.out.println("cmsIp=" + cmsIp + CMS_VC_NAME + cmsPort + cmsVml);
+
 		if (!vc.initial(CMS_VC_NAME, cmsIp, cmsPort, cmsVml)) {
-			System.out.println("对不对看这个"
-					+ vc.initial(CMS_VC_NAME, cmsIp, cmsPort, cmsVml));
+
 			return false;
 		}
 		updateLoginActTitle("获取CMS地址完毕!");
@@ -256,7 +243,7 @@ public class VspOperation {
 	}
 
 	private static boolean procVersionInfo(VspMessage vm) {
-		Log.d(tag, "procVersionInfo: enter!");
+	
 		return true;
 	}
 
@@ -274,14 +261,14 @@ public class VspOperation {
 			case VspDefine.codeVersionInfo:
 				return procVersionInfo(vm);
 			default:
-				Log.e(tag, "unknown code[" + vm.getCode() + "] comes in!");
+				
 			}
 			return false;
 		}
 
 		@Override
 		public void onRecvError() {
-			Log.e(tag, "onRecvError: enter!");
+		
 			// Reset();
 		}
 	};
@@ -301,7 +288,7 @@ public class VspOperation {
 			rsVc.destroy(); // should do this to colse ts's connection
 		rsVc = new VspCodec();
 
-		System.out.println("QQQQ:szf=" + RS_VC_NAME + rsIp + rsPort + rsVml);
+
 		if (!rsVc.initial(RS_VC_NAME, rsIp, rsPort, rsVml))
 			return false;
 		VspMessage vm = new VspMessage(VspDefine.codeGetCMSRoute,
@@ -323,18 +310,16 @@ public class VspOperation {
 				updateLoginActTitle("等待获取CMS地址 "
 						+ (WAIT_VSP_RESPONSE_COUNT - waitCount));
 				if (waitCount++ > WAIT_VSP_RESPONSE_COUNT) {
-					Log.e(tag,
-							"GetCmsAddress: timeout when waitting for rs's response msg!");
+					
 					return false;
 				}
 			} catch (InterruptedException e) {
-				Log.e(tag, "GetCmsAddress: Execption raised. " + e.getMessage());
+			
 				e.printStackTrace();
 			}
 		}
 		showCommonResInfo(VspDefine.codeGetCMSRoute);
-		Log.d(tag, "GetCmsAddress: return cmsAddress=[" + cmsIp + ":" + cmsPort
-				+ "]");
+	
 		return HasGotCmsAddress();
 	}
 
@@ -343,8 +328,7 @@ public class VspOperation {
 		appCuId = vp.getIntValue(VspDefine.AppCuInfo_cuId_idx);
 		nickName = vp.getStringValue(VspDefine.AppCuInfo_nickName_idx);
 		userId = vp.getIntValue(VspDefine.AppCuInfo_userId_idx);
-		Log.d(tag, "procAppCuLogin: enter! [userId=" + userId + "][appCuId="
-				+ appCuId + "][" + nickName + "]");
+		
 		return true;
 	}
 
@@ -366,16 +350,14 @@ public class VspOperation {
 				VspOperation.domId = vp.getIntValue(VspDefine.Id_id_idx);
 				break;
 			default:
-				Log.e(tag,"procLoginRes: unknown id_type["+idType+"]");
+			
 			}
 		}
 		VspProperty vp = vm.getPropertyByIndex(3);
 		VspOperation.HEARTBEAT_INTEVAL = vp.getIntValue(VspDefine.Timeout_interval_idx)*1000;
 		VspOperation.IDLE_TIMEOUT_COUNT = vp.getIntValue(VspDefine.Timeout_timeout_idx)/vp.getIntValue(VspDefine.Timeout_interval_idx);
 		
-		Log.d(tag, "procLoginRes: enter! [sessionId=" + sessionId + "][cuId="
-				+ cuId + "][domId="+domId+"][heartbeatInteval="+HEARTBEAT_INTEVAL
-				+"][IDLE_TIMEOUT_COUNT="+IDLE_TIMEOUT_COUNT);
+
 		return true;
 	}
 
@@ -384,7 +366,7 @@ public class VspOperation {
 	private static String advList = "";
 
 	private static boolean procGetAdvList(VspMessage vm) {
-		Log.d(tag, "procGetAdvList: enter!");
+	
 
 		VspProperty vp1 = vm.getProperty(VspDefine.propAdvInfo);
 		advUpdateTime = vp1.getIntValue(VspDefine.AdvInfo_advUpdateTime_idx);
@@ -408,28 +390,27 @@ public class VspOperation {
 	}
 
 	private static boolean doRaiseAlarm(String xmlAlarm) {
-		Log.d(tag, "doRaiseAlarm: comes in!" + xmlAlarm);
+	
 		xmlAlarm = xmlAlarm.toLowerCase();
 		String puId = Tools.ParseXmlElement(xmlAlarm, "puid");
 		if (puId.equals("")) {
-			Log.e(tag, "doRaiseAlarm: puId should not be empty!");
+		
 			return false;
 		}
 		int nPuId = Integer.parseInt(puId);
 		if (nPuId != selectedPuId) {
-			Log.e(tag, "doRaiseAlarm: puId[" + puId
-					+ "] should equal selectedPuId[" + selectedPuId + "]!");
+		
 			return false;
 		}
 		int at = Integer.parseInt(Tools.ParseXmlElement(xmlAlarm, "at"));
 		String timestamp = Tools.ParseXmlElement(xmlAlarm, "tt");
 		if (timestamp.equals("")) {
-			Log.e(tag, "doRaiseAlarm: timestamp should not be empty!");
+		
 			return false;
 		}
 		String eliminated = Tools.ParseXmlElement(xmlAlarm, "as");
 		if (eliminated.equals("")) {
-			Log.e(tag, "doRaiseAlarm: eliminated should not be empty!");
+		
 			return false;
 		}
 		return true;
@@ -442,7 +423,7 @@ public class VspOperation {
 		@Override
 		public boolean onMessageReceived(VspMessage vm) {
 			int vmCode = vm.getCode();
-			Log.w(tag,"vm [code="+vm.getCode()+"] [versionInfo="+vmCode+"][idleCount="+idleCount+"]comes in!");
+		
 			//心跳包的判断
 			if (vmCode == VspDefine.codeHeartBeatRes ){
 				VspOperation.idleCount = 0;
@@ -456,7 +437,7 @@ public class VspOperation {
 			case VspDefine.codeGetPuList:
 //				return procGetPuList(vm);
 			case VspDefine.codeHeartBeatRes:
-				Log.v(tag, "HeartBeatRes comes in!");
+			
 				return true;
 			case VspDefine.codeGetAdvList:
 				return procGetAdvList(vm);
@@ -467,7 +448,7 @@ public class VspOperation {
 			case VspDefine.codePuState:
 				return procPuState(vm);
 			default:
-				Log.e(tag, "unknown code[" + vm.getCode() + "] comes in!");
+			
 			}
 			return false;
 		}
@@ -483,7 +464,7 @@ public class VspOperation {
 			String s = "PuStateOnLine: {"+
 					vpPuId.getIntValue(VspDefine.Id_type_idx)+","+
 					vpPuId.getIntValue(VspDefine.Id_id_idx)+"}";
-			System.out.println(s);
+
 			int puId = vpPuId.getIntValue(VspDefine.Id_id_idx);
 			VspProperty vpOnline=vm.getPropertyByIndex(1);
 			byte[] onlineStateBytes = new byte[4];
@@ -521,7 +502,7 @@ public class VspOperation {
 				vp.getIntValue(VspDefine.TTContent_type_idx)+","+
 				vp.getIntValue(VspDefine.TTContent_userTag_idx)+","+
 				content+"}";
-			Log.i(tag,"procTTBinary: "+s);
+		
 			Service.sendBroadcast(NoFormatConsts.MOIT_PU_BROADCAST_MSG_ACTION
 				, new String[]{""+puId,content});
 			return true;
@@ -535,7 +516,7 @@ public class VspOperation {
 	protected static boolean AppCuLogin(Context c, String userName,
 			String password) {
 		if (!HasGotCmsAddress()) {
-			Log.e(tag, "AppCuLogin: should get cms address first!");
+		
 			return false;
 		}
 		updateLoginActTitle("获取CMS地址完毕-1!");
@@ -544,10 +525,9 @@ public class VspOperation {
 		cmsVc = new VspCodec();
 		cmsIp = "192.168.10.83";
 		updateLoginActTitle(cmsIp);
-		System.out.println("cmsIp=" + cmsIp + CMS_VC_NAME + cmsPort + cmsVml);
+
 		if (!cmsVc.initial(CMS_VC_NAME, cmsIp, cmsPort, cmsVml)) {
-			System.out.println("对不对看这个"
-					+ cmsVc.initial(CMS_VC_NAME, cmsIp, cmsPort, cmsVml));
+
 			return false;
 		}
 		updateLoginActTitle("获取CMS地址完毕-3!");
@@ -568,27 +548,24 @@ public class VspOperation {
 				updateLoginActTitle("等待应用登录 "
 						+ (WAIT_VSP_RESPONSE_COUNT - waitCount));
 				if (waitCount++ > WAIT_VSP_RESPONSE_COUNT) {
-					Log.e(tag,
-							"AppCuLogin: timeout when waitting for cms's response msg!");
+				
 					return false;
 				}
 			} catch (InterruptedException e) {
-				Log.e(tag, "AppCuLogin: Execption raised. " + e.getMessage());
+			
 				e.printStackTrace();
 			}
 		}
-		System.out.println("appCuId=" + appCuId + "userId" + userId
-				+ "nickName=" + nickName);
+		
 		showCommonResInfo(VspDefine.codeAppCuLogin);
-		Log.d(tag, "AppCuLogin: return [userId=" + userId + "][appCuId="
-				+ appCuId + "][" + nickName + "]");
-		System.out.println("HasAppLogin=" + HasAppLogin());
+		
+
 		return HasAppLogin();
 	}
 
 	protected static boolean CuLogin(Context c,String userName, String password) {
 		if (cmsVc == null) {
-			Log.e(tag, "CuLogin: cms should be connected first!");
+		
 			return false;
 		}
 		VspMessage vm = new VspMessage(VspDefine.codeLogin,
@@ -609,22 +586,21 @@ public class VspOperation {
 				updateLoginActTitle("等待交换平台登录 "
 						+ (WAIT_VSP_RESPONSE_COUNT - waitCount));
 				if (waitCount++ > WAIT_VSP_RESPONSE_COUNT) {
-					Log.e(tag,
-							"CuLogin: timeout when waitting for cms's response msg!");
+				
 					return false;
 				}
 			} catch (InterruptedException e) {
-				Log.e(tag, "CuLogin: Execption raised. " + e.getMessage());
+			
 				e.printStackTrace();
 			}
 		}
 		showCommonResInfo(VspDefine.codeLogin);
-		Log.d(tag, "CuLogin: return [cuId=" + cuId + "]");
+	
 		return HasLogin();
 	}
 
 	private static void updateLoginActTitle(String title) {
-		Log.e(tag, title);
+	
 	}
 
 	static String lastUserName = "";
@@ -648,7 +624,7 @@ public class VspOperation {
 				return true;
 			}
 		}
-		Log.d(tag, "Login: failure![" + userName + "/" + password + "]");
+	
 		Reset();
 		return false;
 	}
@@ -658,7 +634,7 @@ public class VspOperation {
 	static int send=0;
 	
 	public static boolean toPu(int puId, String content, int type, int userTag ) {
-		Log.d(tag, "toPu: enter![" + cuId + "=>" + puId + ": "+content+"]");
+		
 		if (cmsVc == null) {
 			if (!isLogout) {
 				if (send<1) {
@@ -684,7 +660,7 @@ public class VspOperation {
 		return true;
 	}
 	public static boolean toCu(int puId, String content, int type, int userTag ) {
-		Log.d(tag, "toPu: enter![" + cuId + "=>" + puId + ": "+content+"]");
+	
 		if (cmsVc == null) {
 			if (!isLogout) {
 				if (send<1) {
@@ -712,9 +688,9 @@ public class VspOperation {
 	
 
 	public static void Logout(Context c) {
-		Log.d(tag, "Logout: enter![" + cuId + "/" + selectedPuId + "]");
+	
 		if (cmsVc == null) {
-			Log.e(tag, "Logout: cms should be connected first!");
+		
 			return;
 		}
 		isLogout=false;
@@ -734,11 +710,11 @@ public class VspOperation {
 
 	public static boolean RefreshCameras(Context c) {
 		if (!HasLogin(c)) {
-			Log.e(tag, "RefreshCameras: should login first");
+		
 			return false;
 		}
 		if (cmsVc == null) {
-			Log.e(tag, "RefreshCameras: cms should be connected first!");
+			
 			return false;
 		}
 		VspMessage vm = new VspMessage(VspDefine.codeGetPuList, sessionId);
@@ -751,7 +727,7 @@ public class VspOperation {
 	}
 
 	public static boolean AutoLogin(Context c) {
-		Log.d(tag, "AutoLogin: enter! hasLogin=" + HasLogin());
+	
 		if (HasLogin())
 			return true;
 		String sAutoLogin = Tools.GetProfileString("login", "autoLogin",
@@ -768,9 +744,9 @@ public class VspOperation {
 	}
 
 	public static boolean GetAdvList() {
-		Log.d(tag, "GetAdvList enter! ******************* ");
+	
 		if (cmsVc == null) {
-			Log.e(tag, "Logout: cms should be connected first!");
+		
 			return false;
 		}
 		VspMessage vm = new VspMessage(VspDefine.codeGetAdvList,

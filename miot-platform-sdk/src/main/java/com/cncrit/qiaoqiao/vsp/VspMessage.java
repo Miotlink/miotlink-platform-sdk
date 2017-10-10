@@ -1,13 +1,11 @@
 package com.cncrit.qiaoqiao.vsp;
 
+import com.cncrit.qiaoqiao.Tools;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
-import com.cncrit.qiaoqiao.Tools;
-
-import android.util.Log;
 
 public class VspMessage {
 	public static final String tag = VspMessage.class.getName();
@@ -30,8 +28,7 @@ public class VspMessage {
 
 	public boolean setLength(int length) {
 		if(length<MSG_HEAD_LENGTH || length >=MSG_MAX_LENGTH) {
-			Log.e(tag,"setLength: invalid length "+length+", should between "
-					+MSG_HEAD_LENGTH+" and "+MSG_MAX_LENGTH+"!");
+
 			return false;
 		}
 		this.length = length;
@@ -44,8 +41,7 @@ public class VspMessage {
 
 	public boolean setCode(int code) {
 		if(code<0 || code>=VspDefine.MAX_MSG_CODE) {
-			Log.e(tag,"setCode: invalid code " + code +" , should between 0 and "
-					+ VspDefine.MAX_MSG_CODE);
+
 			return false;
 		}
 		this.code = code;
@@ -74,8 +70,7 @@ public class VspMessage {
 
 	public boolean setVariableMsg(boolean isVariableMsg) {
 		if( isVariableMsg && this.isVariableMsg){
-			Log.e(tag,"setVariableMsg: the msg is variable already!");
-			return false;
+
 		}
 		this.isVariableMsg = isVariableMsg;
 		return true;
@@ -93,7 +88,7 @@ public class VspMessage {
 	
 	public static VspMessage parse(byte []recvBuff, int vmLen){
 		if(recvBuff == null) {
-			Log.e(tag,"parse: recvBuff can not be null!");
+
 			return null;			
 		}
 		
@@ -146,7 +141,7 @@ public class VspMessage {
 		System.out.println("proplenth="+propLength);
 		synchronized(this){
 			if(this.isVariableMsg()){
-				Log.e(tag,"addProperty: can not add property after a variable prop has been added!");
+
 				return null;
 			}
 			if (VspDefine.isVariableProp(type))

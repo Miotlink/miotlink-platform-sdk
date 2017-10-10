@@ -67,7 +67,7 @@ public class MiotlinkPlatform {
 
 	public Result init() {
 		Result result = new Result();
-		result.success("Versions_V2.2.0");
+		result.success("Versions_V2.2.1");
 		return result;
 
 	}
