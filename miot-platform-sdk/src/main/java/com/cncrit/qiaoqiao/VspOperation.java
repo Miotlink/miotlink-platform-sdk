@@ -22,7 +22,7 @@ public class VspOperation {
 	public static int userId = 0;
 	public static String nickName = "";
 	public static int selectedPuId = 0;
-	public static String rsIp = "192.168.10.83"; 
+	public static String rsIp = "118.190.61.214";
 	public static int rsPort = 28001;
 	protected static String cmsIp = "";   
 	protected static int cmsPort = 28101;
