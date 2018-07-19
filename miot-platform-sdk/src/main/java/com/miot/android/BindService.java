@@ -107,7 +107,7 @@ public class BindService {
 		if (bind != null ) {
 			context.unbindService(mConnection);
 			context.stopService(new Intent(
-					NoFormatConsts.SERVICE_ACTION));
+					context.getPackageName()));
 			setBind(null);
 			context.unregisterReceiver(broadCast);
 		}
