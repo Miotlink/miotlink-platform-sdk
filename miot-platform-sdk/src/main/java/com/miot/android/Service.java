@@ -85,7 +85,6 @@ public class Service extends android.app.Service {
 	 */
 	@Override
 	public IBinder onBind(Intent intent) {
-		
 		WebService webService = new WebService(NoFormatConsts.NAMESPACE,
 				NoFormatConsts.ENDPOINT);
 		bind = new PlatformBind(webService);
@@ -107,7 +106,7 @@ public class Service extends android.app.Service {
 	}
 	
 	
-	static public class getHostAddress extends AsyncTask<String, Void, String> {
+	 public static class getHostAddress extends AsyncTask<String, Void, String> {
 
 		@Override
 		protected String doInBackground(String... params) {
@@ -126,8 +125,6 @@ public class Service extends android.app.Service {
 			try{
 				if (result!=null) {
 					NoFormatConsts.PLATFORM_IP = result;
-					VspOperation.rsIp = NoFormatConsts.PLATFORM_IP;
-				}else{
 					VspOperation.rsIp = NoFormatConsts.PLATFORM_IP;
 				}
 			}catch(Exception e){

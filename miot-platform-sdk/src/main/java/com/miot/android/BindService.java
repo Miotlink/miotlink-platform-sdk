@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.text.TextUtils;
 
 import com.miot.android.content.NoFormatConsts;
 import com.miot.android.receiver.MmwBroadCast;
@@ -62,7 +63,7 @@ public class BindService {
 		if (mConnection==null) {
 			mConnection=new MyServiceConnection();
 		}
-		Intent intent = new Intent(NoFormatConsts.SERVICE_ACTION);
+		Intent intent = new Intent(context.getPackageName());
 		context.bindService(intent, mConnection,
 				Service.BIND_AUTO_CREATE);
 	}
@@ -75,7 +76,7 @@ public class BindService {
 		if (mConnection==null) {
 			mConnection=new MyServiceConnection();
 		}
-		Intent intent = new Intent(NoFormatConsts.SERVICE_ACTION);
+		Intent intent = new Intent(packageName);
 		intent.setPackage(packageName);
 		context.bindService(intent, mConnection,
 				Service.BIND_AUTO_CREATE);
@@ -92,7 +93,10 @@ public class BindService {
 		if (mConnection==null) {
 			mConnection=new MyServiceConnection();
 		}
-		Intent intent = new Intent(NoFormatConsts.SERVICE_ACTION);
+		if (TextUtils.isEmpty(packageName)){
+			packageName=context.getPackageName();
+		}
+		Intent intent = new Intent(packageName);
 		intent.setPackage(packageName);
 		context.bindService(intent, mConnection,
 				Service.BIND_AUTO_CREATE);

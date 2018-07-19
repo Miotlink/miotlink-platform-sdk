@@ -89,7 +89,6 @@ public class MiotlinkPlatform {
 			}
 			
 			if (bind==null) {
-				
 				bind=bindService.getBind();
 			}
 			result = bind.loginCu(cu);
