@@ -15,7 +15,12 @@
                  android:label="@string/app_name"
                  android:supportsRtl="true"
     >
-
+        <service android:name="com.miot.android.Service"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="${applicationId}" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
