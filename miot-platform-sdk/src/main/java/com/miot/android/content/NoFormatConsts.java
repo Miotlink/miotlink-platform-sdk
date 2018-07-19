@@ -13,7 +13,7 @@ public class NoFormatConsts {
 	public static final String NOTICE_LOGIN_OUT = "com.miot.android.NOTICE_LOGIN_OUT";
 	public static final String MIOT_PLATFORM_RECONNECTED = "com.miot.android.mmw.MIOT_PLATFORM_RECONNECTED";
 	public static final String MIOT_PU_STATED_CHANAGED="com.miot.android.mmw.MIOT_PU_STATED_CHANAGED";
-	public static String PLATFORM_IP = PLATFORM_EXTERNAL_IP;
+	public static String PLATFORM_IP = "118.190.67.214";
 	
 	
 	
@@ -25,6 +25,7 @@ public class NoFormatConsts {
 			ENDPOINT = "http://" + NoFormatConsts.PLATFORM_EXTERNAL_URL
 					+ ":80/axis2/services/buzService?wsdl";
 		} else if (type == 2) {
+			PLATFORM_IP="118.190.67.214";
 			PLATFORM_EXTERNAL_IP = "www.51miaomiao.com";
 			PLATFORM_EXTERNAL_URL = "www.51miaomiao.com";
 			ENDPOINT = "http://" + NoFormatConsts.PLATFORM_EXTERNAL_URL
