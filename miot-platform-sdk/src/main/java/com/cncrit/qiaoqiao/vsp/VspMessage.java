@@ -136,9 +136,8 @@ public class VspMessage {
 	// variable prop should be added finally.
 	public VspProperty addProperty(int type){
 		VspProperty prop = new VspProperty();
-		System.out.println("buff="+buff+"type="+type+"length="+length);
+
 		int propLength = prop.initial(buff, type, length);
-		System.out.println("proplenth="+propLength);
 		synchronized(this){
 			if(this.isVariableMsg()){
 

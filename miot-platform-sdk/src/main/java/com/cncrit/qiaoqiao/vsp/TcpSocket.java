@@ -92,9 +92,7 @@ public class TcpSocket<IReceiver> implements Runnable{
 			synchronized (syn) {
 				isNetWorkOk = true;
 			}
-			System.out.println("Connect Ok! "+strServerIP+":"+nPort);
 			is = sc.getInputStream();
-			System.out.println("QQ---is="+is);
 			os = new DataOutputStream(sc.getOutputStream());
 			recvThread = new Thread(null, this);
 			recvThread.start();

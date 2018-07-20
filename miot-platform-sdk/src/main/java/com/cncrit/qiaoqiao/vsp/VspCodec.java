@@ -16,12 +16,9 @@ public class VspCodec implements IReceiver {
 	
 	private IVspMessageListener vml = null;
 	public boolean initial(String name, String ip, int port, IVspMessageListener vml){
-		System.out.println("initial is right--1");
 		VspDefine.initial();
-		System.out.println("initial is right--2");
 		this.vml = vml;
 		this.setName(name);		
-		System.out.println("initial is right--3 name="+name);
 		ts = new TcpSocket<VspCodec>(this);
 		if ( ts != null){
 
