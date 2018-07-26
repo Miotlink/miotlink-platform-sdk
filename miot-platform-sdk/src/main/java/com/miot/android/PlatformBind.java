@@ -18,7 +18,7 @@ public class PlatformBind extends Bind {
 	
 	public String getResultCode(String errorCode,String errormessage){
 		
-		String s="[{\"data\":\"\",\"errorMsg\":\""+errormessage+"\",\"resultCode\":"+errorCode+"\"}]";
+		String s="[{\"data\":\"\",\"errorMsg\":\""+errormessage+"\",\"resultCode\":\""+errorCode+"\"}]";
 		
 		return s;
 	}
