@@ -36,7 +36,6 @@ public class MmwBroadCast extends BroadcastReceiver {
 			}
 			if (miotPlatformUIListener!=null) {
 				try {
-					Log.e("onReceiverDevice", pid+"");
 					miotPlatformUIListener.onReceiverDevice(pid+"", uart);
 				} catch (Exception e) {
 					
