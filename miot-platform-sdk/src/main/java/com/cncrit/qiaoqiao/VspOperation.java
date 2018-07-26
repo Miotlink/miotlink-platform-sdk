@@ -1,6 +1,7 @@
 package com.cncrit.qiaoqiao;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.cncrit.qiaoqiao.vsp.VspCodec;
 import com.cncrit.qiaoqiao.vsp.VspDefine;
@@ -305,12 +306,12 @@ public class VspOperation {
 		stopVspRequestWaiting = false;
 		while (!HasGotCmsAddress() && !stopVspRequestWaiting) {
 			try {
-				// Tools.AlertError("QQ:szf---GetCmsAddress-5", c);
 				Thread.sleep(WAIT_VSP_RESPONSE_INTEVAL);
 				updateLoginActTitle("等待获取CMS地址 "
 						+ (WAIT_VSP_RESPONSE_COUNT - waitCount));
 				if (waitCount++ > WAIT_VSP_RESPONSE_COUNT) {
-					
+					loginFailCode=2002;
+					loginFailErrorMess="cms error";
 					return false;
 				}
 			} catch (InterruptedException e) {
@@ -513,57 +514,8 @@ public class VspOperation {
 		}
 	};
 
-	protected static boolean AppCuLogin(Context c, String userName,
-			String password) {
-		if (!HasGotCmsAddress()) {
-		
-			return false;
-		}
-		updateLoginActTitle("获取CMS地址完毕-1!");
-		if (cmsVc != null)
-			cmsVc.destroy();
-		cmsVc = new VspCodec();
-		cmsIp = "192.168.10.83";
-		updateLoginActTitle(cmsIp);
 
-		if (!cmsVc.initial(CMS_VC_NAME, cmsIp, cmsPort, cmsVml)) {
-
-			return false;
-		}
-		updateLoginActTitle("获取CMS地址完毕-3!");
-		VspMessage vm = new VspMessage(VspDefine.codeAppCuLogin,
-				VspDefine.NONE_SES_ID);
-		VspProperty vp = vm.addProperty(VspDefine.propAppCuInfo);
-		vp.setIntValue(VspDefine.AppCuInfo_appId_idx, VspDefine.APP_ID);
-		vp.setStringValue(VspDefine.AppCuInfo_loginName_idx, userName);
-		vp.setStringValue(VspDefine.AppCuInfo_password_idx, password);
-		if (!cmsVc.send(vm))
-			return false;
-
-		int waitCount = 0;
-		stopVspRequestWaiting = false;
-		while (!HasAppLogin() && !stopVspRequestWaiting) {
-			try {
-				Thread.sleep(WAIT_VSP_RESPONSE_INTEVAL);
-				updateLoginActTitle("等待应用登录 "
-						+ (WAIT_VSP_RESPONSE_COUNT - waitCount));
-				if (waitCount++ > WAIT_VSP_RESPONSE_COUNT) {
-				
-					return false;
-				}
-			} catch (InterruptedException e) {
-			
-				e.printStackTrace();
-			}
-		}
-		
-		showCommonResInfo(VspDefine.codeAppCuLogin);
-		
-
-		return HasAppLogin();
-	}
-
-	protected static boolean CuLogin(Context c,String userName, String password) {
+	protected static boolean CuLogin(String userName, String password) {
 		if (cmsVc == null) {
 		
 			return false;
@@ -600,7 +552,6 @@ public class VspOperation {
 	}
 
 	private static void updateLoginActTitle(String title) {
-	
 	}
 
 	static String lastUserName = "";
@@ -613,13 +564,14 @@ public class VspOperation {
 		updateLoginActTitle("清理完毕!");
 		if (GetCmsAddress(c)) {
 			updateLoginActTitle("获取CMS地址完毕!");
-			if (CuLogin(c,userName,password)) {
+			if (CuLogin(userName,password)) {
 				updateLoginActTitle("登录成功!");
 				VspOperation.userName = userName;
 				lastUserName=userName;
 				lastUserPassword=password;
 				VspOperation.password = password;
 				StartHeartbeat();
+				send=true;
 				isLogout=true;
 				return true;
 			}
@@ -631,20 +583,20 @@ public class VspOperation {
 	
 	static boolean logout=false;
 	
-	static int send=0;
+	static boolean send=true;
 	
 	public static boolean toPu(int puId, String content, int type, int userTag ) {
 		
 		if (cmsVc == null) {
 			if (!isLogout) {
-				if (send<1) {
+				if (send) {
 					Service.sendBroadcast("com.miot.android.MIOT_PLATFORM_RECONNECTED", new String []{"1",""});
-					send++;
+					send=false;
 				}
 			}
 			return false;
 		}
-		send=0;
+		send=true;
 		VspMessage vm = new VspMessage(VspDefine.codeTTBinary, sessionId);
 		VspProperty vp = vm.addProperty(VspDefine.propId);
 		vp.setIntValue(VspDefine.Id_type_idx, 1);
@@ -660,17 +612,16 @@ public class VspOperation {
 		return true;
 	}
 	public static boolean toCu(int puId, String content, int type, int userTag ) {
-	
+
 		if (cmsVc == null) {
 			if (!isLogout) {
-				if (send<1) {
+				if (send) {
 					Service.sendBroadcast("com.miot.android.MIOT_PLATFORM_RECONNECTED", new String []{"1",""});
-					send++;
+					send=false;
 				}
 			}
 			return false;
 		}
-		send=0;
 		VspMessage vm = new VspMessage(VspDefine.codeTTBinary, sessionId);
 		VspProperty vp = vm.addProperty(VspDefine.propId);
 		vp.setIntValue(VspDefine.Id_type_idx, 1);

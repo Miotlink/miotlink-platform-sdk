@@ -1,5 +1,7 @@
 package com.cncrit.qiaoqiao.vsp;
 
+import android.util.Log;
+
 import com.cncrit.qiaoqiao.VspOperation;
 import com.miot.android.Service;
 
@@ -99,16 +101,19 @@ public class TcpSocket<IReceiver> implements Runnable{
 			
 		} catch (UnknownHostException e) {
 			isConnect=false;
+			e.printStackTrace();
 			VspOperation.loginFailCode=-1;
 			VspOperation.loginFailErrorMess="连接服务器失败,检查网络";
 			return false;
 		} catch (IOException e) {
 			isConnect=false;
+			e.printStackTrace();
 			VspOperation.loginFailErrorMess="连接服务器失败,检查网络";
 			VspOperation.loginFailCode=-1;
 			return false;
 		} catch (Exception e) {
 			isConnect=false;
+			e.printStackTrace();
 			VspOperation.loginFailErrorMess="连接服务器失败,检查网络";
 			VspOperation.loginFailCode=-1;
 			return false;
@@ -155,9 +160,6 @@ public class TcpSocket<IReceiver> implements Runnable{
 						((com.cncrit.qiaoqiao.vsp.IReceiver) tsr).onReceive(recvBuff, recvLen);
 					}
 				}
-//				System.gc();
-//				Runtime.getRuntime().gc();
-				
 			} catch (Exception e) {
 				e.printStackTrace();
 				break;

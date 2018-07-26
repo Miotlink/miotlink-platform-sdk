@@ -165,13 +165,9 @@ public class Tools {
 
 	static public int BytesToInt32BE(byte[] buff, int startPos) {
 		int a = (int) ((buff[startPos] & 0xff) << 24);
-		System.out.println(a);
 		int b = (int) ((buff[startPos + 1] & 0xff) << 16);
-		System.out.println(b);
 		int c = (int) ((buff[startPos + 2] & 0xff) << 8);
-		System.out.println(c);
 		int d = (int) (buff[startPos + 3] & 0xff);
-		System.out.println("d=" + d + "buff[15]=" + buff[startPos + 3]);
 		return (int) (a + b + c + d);
 	}
 
@@ -209,12 +205,10 @@ public class Tools {
 		String sIp = ((nIp / 16777216) & 0xFF) + "."
 				+ (((nIp % 16777216) / 65536) & 0xFF) + "."
 				+ (((nIp % 65536) / 256) & 0xFF) + "." + ((nIp % 256) & 0xFF);
-		System.out.println("sIp=" + sIp);
 		return sIp;
 	}
 
 	static public long String2LongIp(String ip) {
-		// Log.d(tag,"LongIp2String: "+(nIp/16777216)+","+((nIp%16777216)/65536));
 		String[] ns = ip.split("\\.");
 		if ( ns.length != 4 ){
 			Log.e(tag,"String2LongIp: wrong ip string["+ip+"],will return 0l!");
