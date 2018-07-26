@@ -67,7 +67,7 @@ public class MiotlinkPlatform {
 
 	public Result init() {
 		Result result = new Result();
-		result.success("Versions_V2.2.1");
+		result.success("Versions_V2.2.7");
 		return result;
 
 	}
@@ -592,7 +592,7 @@ public class MiotlinkPlatform {
 	
     private  String getResultCode(String errorCode,String errormessage){
 		
-		String s="[{\"data\":\"\",\"errorMsg\":\""+errormessage+"\",\"resultCode\":"+errorCode+"\"}]";
+		String s="[{\"data\":\"\",\"errorMsg\":\""+errormessage+"\",\"resultCode\":\""+errorCode+"\"}]";
 		
 		return s;
 	}
@@ -600,7 +600,7 @@ public class MiotlinkPlatform {
 	/**
 	 * 二维码信息
 	 * 
-	 * @param string
+	 * @param qrcode
 	 * @return
 	 */
 	public Result miotlinkPlatform_qRcode(String qrcode) {
