@@ -4,10 +4,8 @@
 
 package com.miot.android;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -15,9 +13,7 @@ import com.cncrit.qiaoqiao.VspOperation;
 import com.cncrit.qiaoqiao.WebService;
 import com.miot.android.content.NoFormatConsts;
 import com.miot.android.util.ACache;
-import com.miot.android.util.MHost;
-
-import java.net.InetAddress;
+import com.miot.android.util.Mhost;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -48,7 +44,7 @@ public class Service extends android.app.Service {
 	@Override
 	public void onCreate() {
 		if(ACache.get(this).getAsString(NoFormatConsts.PLATFORM_EXTERNAL_URL)==null){
-			new MHost.HostAddress().execute(NoFormatConsts.PLATFORM_EXTERNAL_URL);
+			new Mhost.HostAddress().execute(NoFormatConsts.PLATFORM_EXTERNAL_URL);
 		}else{
 			Log.e("onCreate", ACache.get(this).getAsString(NoFormatConsts.PLATFORM_EXTERNAL_URL));
 			VspOperation.rsIp=ACache.get(this).getAsString(NoFormatConsts.PLATFORM_EXTERNAL_URL);
