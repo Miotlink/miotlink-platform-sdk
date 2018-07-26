@@ -15,6 +15,7 @@ import com.cncrit.qiaoqiao.VspOperation;
 import com.cncrit.qiaoqiao.WebService;
 import com.miot.android.content.NoFormatConsts;
 import com.miot.android.util.ACache;
+import com.miot.android.util.MHost;
 
 import java.net.InetAddress;
 
@@ -47,12 +48,14 @@ public class Service extends android.app.Service {
 	@Override
 	public void onCreate() {
 		if(ACache.get(this).getAsString(NoFormatConsts.PLATFORM_EXTERNAL_URL)==null){
-			new getHostAddress().execute(NoFormatConsts.PLATFORM_EXTERNAL_URL);
+			new MHost.HostAddress().execute(NoFormatConsts.PLATFORM_EXTERNAL_URL);
 		}else{
 			Log.e("onCreate", ACache.get(this).getAsString(NoFormatConsts.PLATFORM_EXTERNAL_URL));
 			VspOperation.rsIp=ACache.get(this).getAsString(NoFormatConsts.PLATFORM_EXTERNAL_URL);
 		}
 	}
+
+
 
 	public static Context context;
 
@@ -106,33 +109,5 @@ public class Service extends android.app.Service {
 	}
 	
 	
-	 public static class getHostAddress extends AsyncTask<String, Void, String> {
 
-		@Override
-		protected String doInBackground(String... params) {
-			String ip_devdiv = null;
-			try {
-				InetAddress x = InetAddress.getByName(params[0]);
-				ip_devdiv = x.getHostAddress();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return ip_devdiv;
-		}
-
-		@SuppressLint("NewApi") @Override
-		protected void onPostExecute(String result) {
-			try{
-				if (result!=null) {
-					NoFormatConsts.PLATFORM_IP = result;
-					VspOperation.rsIp = NoFormatConsts.PLATFORM_IP;
-				}
-			}catch(Exception e){
-				
-			}
-			
-			super.onPostExecute(result);
-			
-		}
-	}
 }
