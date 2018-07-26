@@ -14,11 +14,12 @@ import com.miot.android.Bind;
 import com.miot.android.BindService;
 import com.miot.android.Result;
 import com.miot.android.Service;
-import com.miot.android.Service.getHostAddress;
+
 import com.miot.android.content.NoFormatConsts;
 import com.miot.android.listener.MiotPlatformUIListener;
 import com.miot.android.receiver.MmwBroadCast;
 import com.miot.android.util.ACache;
+import com.miot.android.util.Mhost;
 import com.miot.android.util.MiotMacParseUitls;
 import com.miot.android.util.MiotQrcodeParseUitls;
 import com.miot.android.util.MiotlinkUtil;
@@ -85,9 +86,8 @@ public class MiotlinkPlatform {
 			cu.setName(map.get("username").toString());
 			cu.setPassword(map.get("password").toString());
 			if (ACache.get(context).getAsString(NoFormatConsts.PLATFORM_EXTERNAL_URL)==null) {
-				new Service.getHostAddress().execute(NoFormatConsts.PLATFORM_EXTERNAL_URL);
+				new Mhost.HostAddress().execute(NoFormatConsts.PLATFORM_EXTERNAL_URL);
 			}
-			
 			if (bind==null) {
 				bind=bindService.getBind();
 			}
