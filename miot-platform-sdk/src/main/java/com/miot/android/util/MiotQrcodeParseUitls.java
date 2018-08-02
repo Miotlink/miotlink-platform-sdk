@@ -26,7 +26,7 @@ public class MiotQrcodeParseUitls {
 
 						}else if(qrcode.indexOf("qrcode")>0||qrcode.indexOf("QRCode")>0||qrcode.indexOf("qrCode")>0){
 							String [] eqs=qrcodes.split("=");
-							if (eqs.length>0) {
+							if (eqs.length>1) {
 								if (checkMiotQRCode(eqs[1])) {
 									result = eqs[1];
 									return result;
