@@ -85,16 +85,16 @@ public class MiotlinkPlatform {
 			Cu cu = new Cu();
 			cu.setName(map.get("username").toString());
 			cu.setPassword(map.get("password").toString());
-			if (ACache.get(context).getAsString(NoFormatConsts.PLATFORM_EXTERNAL_URL)==null) {
-				new Mhost.HostAddress().execute(NoFormatConsts.PLATFORM_EXTERNAL_URL);
-			}
+//			if (ACache.get(context).getAsString(NoFormatConsts.PLATFORM_EXTERNAL_IP)==null) {
+//				new Mhost.HostAddress().execute(NoFormatConsts.PLATFORM_EXTERNAL_IP);
+//			}
 			if (bind==null) {
 				bind=bindService.getBind();
 			}
 			result = bind.loginCu(cu);
 			if (result.getCode()==Result.CODE_SUCCESS) {
-				if (ACache.get(context).getAsString(NoFormatConsts.PLATFORM_EXTERNAL_URL)==null) {
-					ACache.get(context).put(NoFormatConsts.PLATFORM_EXTERNAL_URL, VspOperation.rsIp,24*60*60);
+				if (ACache.get(context).getAsString(NoFormatConsts.PLATFORM_EXTERNAL_IP)==null) {
+					ACache.get(context).put(NoFormatConsts.PLATFORM_EXTERNAL_IP, VspOperation.rsIp,24*60*60);
 				}
 			}
 		} catch (Exception e) {

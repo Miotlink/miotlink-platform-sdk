@@ -43,11 +43,11 @@ public class Service extends android.app.Service {
 	 */
 	@Override
 	public void onCreate() {
-		if(ACache.get(this).getAsString(NoFormatConsts.PLATFORM_EXTERNAL_URL)==null){
-			new Mhost.HostAddress().execute(NoFormatConsts.PLATFORM_EXTERNAL_URL);
+		if(ACache.get(this).getAsString(NoFormatConsts.PLATFORM_EXTERNAL_IP)==null){
+			new Mhost.HostAddress().execute(NoFormatConsts.PLATFORM_EXTERNAL_IP);
 		}else{
-			Log.e("onCreate", ACache.get(this).getAsString(NoFormatConsts.PLATFORM_EXTERNAL_URL));
-			VspOperation.rsIp=ACache.get(this).getAsString(NoFormatConsts.PLATFORM_EXTERNAL_URL);
+			Log.e("onCreate", ACache.get(this).getAsString(NoFormatConsts.PLATFORM_EXTERNAL_IP));
+			VspOperation.rsIp=ACache.get(this).getAsString(NoFormatConsts.PLATFORM_EXTERNAL_IP);
 		}
 	}
 

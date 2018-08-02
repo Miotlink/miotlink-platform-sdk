@@ -4,7 +4,7 @@ package com.miot.android.content;
 public class NoFormatConsts {
 	
     public static  String PLATFORM_EXTERNAL_IP = "www.51miaomiao.com";
-	public static  String PLATFORM_EXTERNAL_URL ="www.51miaomiao.com";
+	public static  String PLATFORM_EXTERNAL_URL ="base.51miaomiao.com";
 	public static  String NAMESPACE = "http://www.buz.org/buzService/";
 	public static  String ENDPOINT = "http://" + NoFormatConsts.PLATFORM_EXTERNAL_URL
 			+ ":80/axis2/services/buzService?wsdl";
@@ -27,7 +27,7 @@ public class NoFormatConsts {
 		} else if (type == 2) {
 			PLATFORM_IP="118.190.67.214";
 			PLATFORM_EXTERNAL_IP = "www.51miaomiao.com";
-			PLATFORM_EXTERNAL_URL = "www.51miaomiao.com";
+			PLATFORM_EXTERNAL_URL = "base.51miaomiao.com";
 			ENDPOINT = "http://" + NoFormatConsts.PLATFORM_EXTERNAL_URL
 					+ ":80/axis2/services/buzService?wsdl";
 		} else if (type == 3) {
